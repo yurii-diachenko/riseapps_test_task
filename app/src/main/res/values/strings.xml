@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Riseapps Test Task</string>
+    <string name="dialog_positive">OK</string>
 </resources>
