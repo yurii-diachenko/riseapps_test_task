@@ -3,15 +3,20 @@ package com.ups.riseappstesttask.views;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.ups.riseappstesttask.R;
 import com.ups.riseappstesttask.model.Extras;
+import com.ups.riseappstesttask.model.entities.Contact;
 import com.ups.riseappstesttask.model.repositories.RealmContactRepository;
 import com.ups.riseappstesttask.presenters.ContactListPresenter;
+import com.ups.riseappstesttask.views.adapters.ContactsAdapter;
 import com.ups.riseappstesttask.views.interfaces.ABaseActivityView;
 import com.ups.riseappstesttask.views.interfaces.IContactListView;
+
+import java.util.List;
 
 public class ContactListActivity extends ABaseActivityView<ContactListPresenter> implements IContactListView {
 
@@ -31,6 +36,8 @@ public class ContactListActivity extends ABaseActivityView<ContactListPresenter>
     protected void onViewCreated(Bundle savedInstanceState) {
         super.onViewCreated(savedInstanceState);
         recyclerView = (RecyclerView) findViewById(R.id.rvList);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(linearLayoutManager);
         fab = (FloatingActionButton) findViewById(R.id.fabAdd);
 
         fab.setOnClickListener(new View.OnClickListener() {
@@ -41,5 +48,10 @@ public class ContactListActivity extends ABaseActivityView<ContactListPresenter>
                 startActivityWithTransition(intent);
             }
         });
+    }
+
+    @Override
+    public void setContacts(List<Contact> contacts) {
+        recyclerView.setAdapter(new ContactsAdapter(contacts));
     }
 }

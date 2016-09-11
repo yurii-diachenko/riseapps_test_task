@@ -17,6 +17,6 @@ public class ContactListPresenter extends IPresenter<IContactListView> {
 
     @Override
     public void init() {
-
+        view.setContacts(contactRepository.getContacts());
     }
 }

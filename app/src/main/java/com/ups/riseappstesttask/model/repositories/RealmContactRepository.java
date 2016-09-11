@@ -8,6 +8,7 @@ import com.ups.riseappstesttask.model.repositories.interfaces.IContactRepository
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -33,6 +34,8 @@ public class RealmContactRepository implements IContactRepository {
 
     @Override
     public void addContact(Contact contact) {
+        long primaryKeyValue = realm.where(Contact.class).max("id").longValue();
+        contact.setId(++primaryKeyValue);
         realm.beginTransaction();
         realm.insert(contact);
         realm.commitTransaction();
