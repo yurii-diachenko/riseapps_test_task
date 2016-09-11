@@ -1,6 +1,7 @@
 package com.ups.riseappstesttask.views;
 
 import com.ups.riseappstesttask.R;
+import com.ups.riseappstesttask.model.repositories.RealmContactRepository;
 import com.ups.riseappstesttask.presenters.ContactListPresenter;
 import com.ups.riseappstesttask.views.interfaces.ABaseActivityView;
 import com.ups.riseappstesttask.views.interfaces.IContactListView;
@@ -9,7 +10,7 @@ public class ContactListActivity extends ABaseActivityView<ContactListPresenter>
 
     @Override
     protected ContactListPresenter createPresenter() {
-        return new ContactListPresenter(this);
+        return new ContactListPresenter(this, RealmContactRepository.getInstance());
     }
 
     @Override
