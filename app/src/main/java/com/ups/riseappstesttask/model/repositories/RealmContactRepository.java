@@ -12,6 +12,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 /**
  * Created by Yuriy Diachenko on 11.09.2016.
@@ -43,7 +44,9 @@ public class RealmContactRepository implements IContactRepository {
 
     @Override
     public void removeContact(Contact contact) {
+        realm.beginTransaction();
         contact.deleteFromRealm();
+        realm.commitTransaction();
     }
 
     @Override
@@ -55,8 +58,7 @@ public class RealmContactRepository implements IContactRepository {
 
     @Override
     public List<Contact> getContacts() {
-        RealmResults<Contact> results = realm.where(Contact.class)
-                .findAll();
-        return Arrays.asList(results.toArray(new Contact[results.size()]));
+        RealmResults<Contact> results = realm.where(Contact.class).findAllSorted(new String[]{"firstName", "secondName", "sourname"}, new Sort[]{Sort.ASCENDING, Sort.ASCENDING, Sort.ASCENDING});
+        return new ArrayList<>(Arrays.asList(results.toArray(new Contact[results.size()])));
     }
 }

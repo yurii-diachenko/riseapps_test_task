@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.ups.riseappstesttask.R;
 import com.ups.riseappstesttask.model.entities.Contact;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,7 +25,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             R.drawable.ic_pets_black_48dp, R.drawable.ic_grade_black_48dp};
 
     public ContactsAdapter(List<Contact> contacts) {
-        this.contacts = contacts;
+        this.contacts = new ArrayList<>(contacts);
     }
 
     @Override
@@ -57,6 +58,16 @@ public class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public void setOnItemClickListener(IOnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
+    }
+
+    public void update(List<Contact> contacts) {
+        this.contacts = new ArrayList<>(contacts);
+        notifyDataSetChanged();
+    }
+
+    public void remove(int adapterPosition) {
+        contacts.remove(adapterPosition);
+        notifyItemRangeRemoved(adapterPosition, 1);
     }
 
     public class ContactViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

@@ -82,8 +82,8 @@ public abstract class ABaseActivityView<T extends IPresenter> extends AppCompatA
         builder.show();
     }
 
-    protected void startActivityWithTransition(Intent intent) {
-        startActivity(intent);
+    protected void startActivityWithTransition(Intent intent, int requestCode) {
+        startActivityForResult(intent, requestCode);
         overridePendingTransition(R.anim.slide_up, R.anim.slide_up_out);
     }
 }

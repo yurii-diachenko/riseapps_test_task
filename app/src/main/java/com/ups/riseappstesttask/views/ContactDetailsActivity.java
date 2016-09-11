@@ -80,6 +80,26 @@ public class ContactDetailsActivity extends ABaseActivityView<ContactDetailsPres
                 }
             }
         });
+
+        setupImageSelector();
+    }
+
+    private void setupImageSelector() {
+        for (int i = 0; i < container.getChildCount(); i++) {
+            container.getChildAt(i).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    clearImageSelection();
+                    ((ImageView)((FrameLayout)v).getChildAt(0)).setImageResource(R.drawable.ic_check_white_24dp);
+                }
+            });
+        }
+    }
+
+    private void clearImageSelection() {
+        for (int i = 0; i < container.getChildCount(); i++) {
+            ((ImageView)((FrameLayout)container.getChildAt(i)).getChildAt(0)).setImageDrawable(null);
+        }
     }
 
     private int getImageIndex() {

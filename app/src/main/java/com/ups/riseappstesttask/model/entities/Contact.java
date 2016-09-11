@@ -1,5 +1,7 @@
 package com.ups.riseappstesttask.model.entities;
 
+import android.os.Parcelable;
+
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -7,7 +9,7 @@ import io.realm.annotations.PrimaryKey;
 /**
  * Created by Yuriy Diachenko on 11.09.2016.
  */
-public class Contact extends RealmObject {
+public class Contact extends RealmObject{
 
     @PrimaryKey
     private long id;

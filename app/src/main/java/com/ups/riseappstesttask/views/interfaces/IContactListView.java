@@ -9,4 +9,8 @@ import java.util.List;
  */
 public interface IContactListView extends IView{
     void setContacts(List<Contact> contacts);
+
+    void updateContacts(List<Contact> contacts);
+
+    void removeFromAdapter(int adapterPosition);
 }

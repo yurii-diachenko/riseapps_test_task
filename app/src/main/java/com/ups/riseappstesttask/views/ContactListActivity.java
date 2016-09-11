@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 
 import com.ups.riseappstesttask.R;
@@ -20,8 +21,12 @@ import java.util.List;
 
 public class ContactListActivity extends ABaseActivityView<ContactListPresenter> implements IContactListView {
 
+    public static final int REQUEST_CODE = 777;
+
     private RecyclerView recyclerView;
     private FloatingActionButton fab;
+    private ContactsAdapter adapter;
+
     @Override
     protected ContactListPresenter createPresenter() {
         return new ContactListPresenter(this, RealmContactRepository.getInstance());
@@ -38,6 +43,21 @@ public class ContactListActivity extends ABaseActivityView<ContactListPresenter>
         recyclerView = (RecyclerView) findViewById(R.id.rvList);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                presenter.itemSwiped(viewHolder.getLayoutPosition());
+            }
+        };
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
+
+
         fab = (FloatingActionButton) findViewById(R.id.fabAdd);
 
         fab.setOnClickListener(new View.OnClickListener() {
@@ -45,13 +65,31 @@ public class ContactListActivity extends ABaseActivityView<ContactListPresenter>
             public void onClick(View v) {
                 Intent intent = new Intent(ContactListActivity.this, ContactDetailsActivity.class);
                 intent.putExtra(Extras.EXTRA_ADD_OPERATION, true);
-                startActivityWithTransition(intent);
+                startActivityWithTransition(intent, REQUEST_CODE);
             }
         });
     }
 
     @Override
     public void setContacts(List<Contact> contacts) {
-        recyclerView.setAdapter(new ContactsAdapter(contacts));
+        adapter = new ContactsAdapter(contacts);
+        recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public void updateContacts(List<Contact> contacts) {
+        adapter.update(contacts);
+    }
+
+    @Override
+    public void removeFromAdapter(int adapterPosition) {
+        adapter.remove(adapterPosition);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
+            presenter.refreshList();
+        }
     }
 }
